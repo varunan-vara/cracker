@@ -13,8 +13,19 @@ import './status.dart';
 
 const kPrimary = Color.fromRGBO(57, 57, 57, 1);
 const kSecondary = Color.fromRGBO(70, 70, 70, 1);
+const lesslight = Color.fromRGBO(230, 230, 234, 1);
 const kTextColor = Color.fromRGBO(244, 244, 248, 1);
 const double kDefaultPadding = 20.0;
+
+class ThemeNotifier with ChangeNotifier {
+  ThemeData _themeData;
+  ThemeNotifier(this._themeData);
+  getTheme() => _themeData;
+  setTheme(ThemeData themeData) async {
+    _themeData = themeData;
+    notifyListeners();
+  }
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -27,10 +38,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Cranberry",
       theme: ThemeData(
+        brightness: Brightness.light,
         primaryColor: kPrimary,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      debugShowCheckedModeBanner: false,
       home: MyScaffold(),
     );
   }
@@ -121,7 +134,11 @@ class MainBody extends StatelessWidget {
 
   String currentPage = "Home";
 
-  final List<Widget> _children = [MainFeed(), StatusPage(), SettingsPage()];
+  final List<Widget> _children = [
+    MainFeed(),
+    StatusPage(),
+    SettingsPage(kPrimary, kSecondary, kTextColor)
+  ];
 
   final List<String> _pageNames = [
     "I want to...",
